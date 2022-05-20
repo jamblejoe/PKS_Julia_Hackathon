@@ -1,4 +1,5 @@
 using Statistics
+# This is averaged over the spectrum but not yet disorder
 function agr(eigvals::Vector{Float64})
     ratios = Vector{Float64}(undef, length(eigvals)-1)
     for i in 1:length(eigvals)-1
