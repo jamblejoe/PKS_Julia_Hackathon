@@ -24,7 +24,7 @@ function simple_hamiltonian(L, hopping, width, onsite)
     return hamiltonian_arr
 end
 
-function long_range(L::Int, power::Float64, on_site::Float64)
+function long_range(L::Int, power::Number, on_site::Number)
     hamiltonian_arr = Array{Float64}(undef, L, L) 
     
     for i in 1:L
