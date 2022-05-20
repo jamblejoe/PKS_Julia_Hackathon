@@ -31,8 +31,9 @@ function long_range(L::Int, power::Number, on_site::Number)
         
         # long-range coupling
         for j in 1:L
-            dist                 = min(abs(i-j), abs(L-i+j)) #pbc
+            dist                 = min(abs(i-j), abs(L-i)+j, abs(L-j)+i) #pbc
             hamiltonian_arr[i,j] = dist^(-power)
+            
         hamiltonian_arr[i,i] = on_site
         end
     end
