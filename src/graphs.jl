@@ -1,6 +1,15 @@
 using LinearAlgebra
 using Graphs
 
+function chain_graph(n; periodic=true)
+    """Generate a path grah with n vertices and periodic boundary condition"""
+    cg = path_graph(n)
+    if periodic
+        add_edge!(cg, 1, n)
+    end
+    return cg
+end
+
 
 function hamiltonian_from_graph(graph::Graph, E::Vector{<:Number}, V::Vector{<:Number})
     """Generate a hopping hailtonian on graph with on site potentials E and hoppings given by V"""
