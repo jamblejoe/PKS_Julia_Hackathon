@@ -22,13 +22,19 @@ function inverse_participation_ratio(eigenstates)
      return result
 
 end
-"""
-function energy_resolution(energies; boundaries, nbins=10)
-    min_energy, max_energy = boundaries
-    bin_size = (max_energy-min_energy)/(nbins-2)
-    bins = []
 
+function energy_resolution(energies, input, min_energy, max_energy; nbins=10)
 
+    length(energies)==length(input) || error("Dimensions don't match")
 
+    bin_size = (max_energy-min_energy)/(nbins)
+    bins = LinRange(min_energy,max_energy,nbins)
+    bins_counter = zeros(Int,nbins)
+    result = zeros(nbins)
+
+    en = energies[1]
+    counter = 0
+    for i in 1:length(energies)
+        
 end
-"""
+
