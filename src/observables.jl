@@ -8,7 +8,7 @@ Computes the inverse participation ratio for a given set of eigenstates
 eigenstates - an array with the eigenvectors as columns 
 returns a vector with ipr for each eigenstate
 """
-function inverse_participation_ratio(eigenstates::AbstractArray{<:Number,2})
+function inverse_participation_ratio(eigenstates::AbstractArray{<:Number, 2})
     # N number of components of eigenstates = number of sites
     # n_eigs number of eigenstates 
     n_eigs = size(eigenstates,2)
