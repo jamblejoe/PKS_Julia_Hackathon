@@ -42,7 +42,7 @@ function quasiperiodic_hamiltonian(L, period, hopping, width, onsite; qp_type = 
         end
     elseif qp_type == "hopping"
         for i in 1:L
-            hopping_magnitude = cos(2*pi*period*i)  * width
+            hopping_magnitude = hopping+ cos(2*pi*period*i)  * width
             hamiltonian_arr[i, (i+1)%L+1] = hopping_magnitude 
             hamiltonian_arr[(i+1)%L+1, i] = hopping_magnitude 
         end
