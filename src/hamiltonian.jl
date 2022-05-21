@@ -14,12 +14,21 @@ function nn_hamiltonian(L, hopping, onsite)
     return hamiltonian_arr
 end
 
-function simple_hamiltonian(L, hopping, width, onsite)
+function simple_hamiltonian(L, hopping, width, onsite; disorder_type = "site")
     hamiltonian_arr = nn_hamiltonian(L, hopping, onsite)
-
-    for i in 1:L
-        # diagonal
-        hamiltonian_arr[i, i] = randn() * width
+    if disorder_type == "site"
+        for i in 1:L
+            # diagonal
+            hamiltonian_arr[i, i] = randn() * width
+        end
+    elseif disorder_type == "hopping"
+        for i in 1:L
+            hopping_magnitude = randn() * width
+            hamiltonian_arr[i, (i+1)%L+1] = hopping_magnitude 
+            hamiltonian_arr[(i+1)%L+1, i] = hopping_magnitude 
+        end
+    else 
+        print("no disorder has been implemented")
     end
     return hamiltonian_arr
 end
