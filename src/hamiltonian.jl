@@ -35,12 +35,12 @@ end
 
 function quasiperiodic_hamiltonian(L, period, hopping, width, onsite; qp_type = "site")
     hamiltonian_arr = nn_hamiltonian(L, hopping, onsite)
-    if disorder_type == "site"
+    if qp_type == "site"
         for i in 1:L
             # diagonal
             hamiltonian_arr[i, i] = cos(2*pi*period*i) * width
         end
-    elseif disorder_type == "hopping"
+    elseif qp_type == "hopping"
         for i in 1:L
             hopping_magnitude = cos(2*pi*period*i)  * width
             hamiltonian_arr[i, (i+1)%L+1] = hopping_magnitude 
