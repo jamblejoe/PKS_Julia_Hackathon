@@ -11,7 +11,7 @@ function chain_graph(n; periodic=true)
 end
 
 
-function hamiltonian_from_graph(graph::Graph, E::Vector{<:Number}, V::Vector{<:Number})
+function hamiltonian_from_graph(graph::Graph, E::AbstractArray{<:Number}, V::AbstractArray{<:Number})
     """Generate a hopping hailtonian on graph with on site potentials E and hoppings given by V"""
     numv = nv(graph)
     v_mat = zeros(numv, numv)
@@ -31,14 +31,14 @@ function hamiltonian_from_graph(graph::Graph, E::Number, V::Number)
         fill(V, ne(graph)))
 end
 
-function hamiltonian_from_graph(graph::Graph, E::Vector{<:Number}, V::Number)
+function hamiltonian_from_graph(graph::Graph, E::AbstractArray{<:Number}, V::Number)
     """Generate a hopping hailtonian on graph with on site potentials E and hoppings given by V"""
     return hamiltonian_from_graph(graph,
         E,
         fill(V, ne(graph)))
 end
 
-function hamiltonian_from_graph(graph::Graph, E::Number, V::Vector{<:Number})
+function hamiltonian_from_graph(graph::Graph, E::Number, V::AbstractArray{<:Number})
     """Generate a hopping hailtonian on graph with on site potentials E and hoppings given by V"""
     return hamiltonian_from_graph(graph,
         fill(E, nv(graph)),

@@ -69,21 +69,34 @@ function binned_average(x::AbstractArray{<:Real,1}, y::AbstractArray{<:Number,1}
     length(x) == length(y) || error("Dimensions don't match")
 
     first_x_in_bins_idx = findfirst(x -> x > bins[1], x)
+    if isnothing(first_x_in_bins_idx)
+        return zeros(length(bins) - 1)
+    end
     first_x = x[first_x_in_bins_idx]
-    first_bin_idx = findfirst(x -> x > first_x, bins) - 1  # bins[first_bin_idx] < first_x < bins[first_bin_idx + 1]
+    first_bin_idx = findfirst(x -> x > first_x, bins)  # bins[first_bin_idx] < first_x < bins[first_bin_idx + 1]
+    if isnothing(first_bin_idx)
+        return zeros(length(bins) - 1)
+    end
+    first_bin_idx -= 1
 
     bin_idx = first_bin_idx
     binned_y = zeros(length(bins) - 1)
     num_vals = 0
     for (x_el, y_el) in zip(x[first_x_in_bins_idx:end], y[first_x_in_bins_idx:end])
         if x_el > bins[bin_idx+1]
-            binned_y[bin_idx] /= num_vals
-            bin_idx += 1
-            num_vals = 0
-            if bin_idx == length(bins)
+            # println("next bin at ", x_el)
+            if num_vals != 0
+                binned_y[bin_idx] /= num_vals
+                num_vals = 0
+            end
+            bin_idx = findfirst(x -> x > x_el, bins)
+            if isnothing(bin_idx)
                 break
             end
+            bin_idx -= 1
+            # println("new bin idx is ", bin_idx)
         end
+        # println("adding ", x_el, " to bin ", bin_idx)
         binned_y[bin_idx] += y_el
         num_vals += 1
     end
