@@ -33,6 +33,25 @@ function simple_hamiltonian(L, hopping, width, onsite; disorder_type = "site")
     return hamiltonian_arr
 end
 
+function quasiperiodic_hamiltonian(L, period, hopping, width, onsite; qp_type = "site")
+    hamiltonian_arr = nn_hamiltonian(L, hopping, onsite)
+    if disorder_type == "site"
+        for i in 1:L
+            # diagonal
+            hamiltonian_arr[i, i] = cos(2*pi*period*i) * width
+        end
+    elseif disorder_type == "hopping"
+        for i in 1:L
+            hopping_magnitude = cos(2*pi*period*i)  * width
+            hamiltonian_arr[i, (i+1)%L+1] = hopping_magnitude 
+            hamiltonian_arr[(i+1)%L+1, i] = hopping_magnitude 
+        end
+    else 
+        print("no disorder has been implemented")
+    end
+    return hamiltonian_arr
+end
+
 function long_range(L::Int, power::Number, on_site::Number)
     hamiltonian_arr = Array{Float64}(undef, L, L)
 
