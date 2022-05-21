@@ -1,7 +1,7 @@
 using LinearAlgebra
 using Graphs
 
-function chain_graph(n, periodic=true)
+function chain_graph(n; periodic=true)
     """Generate a path grah with n vertices and periodic boundary condition"""
     cg = path_graph(n)
     if periodic
