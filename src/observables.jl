@@ -48,19 +48,33 @@ function wavefunction_moment(q::Number,eigenstate::AbstractArray{<:Number,1})
 end
 
 
-function energy_resolution(energies, input, min_energy, max_energy; nbins=10)
+function binned_average(x::AbstractArray{<:Real, 1}, y::AbstractArray{<:Number, 1}, bins::AbstractArray{<:Real, 1})
 
-    length(energies)==length(input) || error("Dimensions don't match")
+    length(x)==length(y) || error("Dimensions don't match")
 
-    bin_size = (max_energy-min_energy)/(nbins)
-    bins = LinRange(min_energy,max_energy,nbins)
-    bins_counter = zeros(Int,nbins)
-    result = zeros(nbins)
+    first_x_in_bins_idx = findfirst(x -> x > bins[1], x)
+    first_x = x[first_x_in_bins_idx]
+    first_bin_idx = findfirst(x -> x > first_x, bins) - 1  # bins[first_bin_idx] < first_x < bins[first_bin_idx + 1]
 
-    en = energies[1]
-    counter = 0
-    for i in 1:length(energies)
-        counter +=i
+    bin_idx = first_bin_idx
+    binned_y = zeros(length(bins) - 1)
+    num_vals = 0
+    for (x_el, y_el) in zip(x[first_x_in_bins_idx:end], y[first_x_in_bins_idx:end])
+        if x_el > bins[bin_idx + 1]
+            binned_y[bin_idx] /= num_vals
+            bin_idx += 1
+            num_vals = 0
+            if bin_idx == length(bins)
+                break
+            end
+        end
+        binned_y[bin_idx] += y_el
+        num_vals += 1
     end
+  
+    return binned_y
 end
 
+function binned_average(x::AbstractArray{<:Real, 1}, y::AbstractArray{<:Number, 1}, minx::Real, maxx::Real, nbins::Integer)
+    return binned_average(x, y, LinRange(minx, maxx, nbins))
+end
